@@ -5,8 +5,8 @@ import com.example.LearningManagementSystem.Entity.Enrollment;
 import com.example.LearningManagementSystem.Entity.Student;
 import com.example.LearningManagementSystem.Exception.AlreadyEnrolledException;
 import com.example.LearningManagementSystem.Exception.ResourceNotFoundException;
-import com.example.LearningManagementSystem.Repository.EnrollmentRepository;
-import com.example.LearningManagementSystem.Repository.StudentRepository;
+import com.example.LearningManagementSystem.Repository.EnrollmentRepo;
+import com.example.LearningManagementSystem.Repository.StudentRepo;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,12 +15,12 @@ import java.util.List;
 @Service
 public class EnrollmentService {
 
-    private final EnrollmentRepository enrollmentRepository;
-    private final StudentRepository studentRepository;
+    private final EnrollmentRepo enrollmentRepository;
+    private final StudentRepo studentRepository;
     private final CourseService courseService;
 
-    public EnrollmentService(EnrollmentRepository enrollmentRepository,
-                             StudentRepository studentRepository,
+    public EnrollmentService(EnrollmentRepo enrollmentRepository,
+                             StudentRepo studentRepository,
                              CourseService courseService) {
         this.enrollmentRepository = enrollmentRepository;
         this.studentRepository = studentRepository;

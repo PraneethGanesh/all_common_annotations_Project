@@ -3,7 +3,7 @@ package com.example.LearningManagementSystem.Service;
 import com.example.LearningManagementSystem.Entity.Category;
 import com.example.LearningManagementSystem.Exception.DuplicateResourceException;
 import com.example.LearningManagementSystem.Exception.ResourceNotFoundException;
-import com.example.LearningManagementSystem.Repository.CategoryRepository;
+import com.example.LearningManagementSystem.Repository.CategoryRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.List;
 @Service
 public class CategoryService {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryRepo categoryRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepo categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 

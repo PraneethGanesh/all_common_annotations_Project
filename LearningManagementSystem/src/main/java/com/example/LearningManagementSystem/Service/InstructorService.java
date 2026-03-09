@@ -3,7 +3,7 @@ package com.example.LearningManagementSystem.Service;
 import com.example.LearningManagementSystem.Entity.Instructor;
 import com.example.LearningManagementSystem.Exception.DuplicateResourceException;
 import com.example.LearningManagementSystem.Exception.ResourceNotFoundException;
-import com.example.LearningManagementSystem.Repository.InstructorRepository;
+import com.example.LearningManagementSystem.Repository.InstructorRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.List;
 @Service
 public class InstructorService {
 
-    private final InstructorRepository instructorRepository;
+    private final InstructorRepo instructorRepository;
 
-    public InstructorService(InstructorRepository instructorRepository) {
+    public InstructorService(InstructorRepo instructorRepository) {
         this.instructorRepository = instructorRepository;
     }
 

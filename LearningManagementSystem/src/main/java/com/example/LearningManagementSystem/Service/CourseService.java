@@ -5,7 +5,7 @@ import com.example.LearningManagementSystem.Entity.Course;
 import com.example.LearningManagementSystem.Entity.Instructor;
 import com.example.LearningManagementSystem.Exception.DuplicateResourceException;
 import com.example.LearningManagementSystem.Exception.ResourceNotFoundException;
-import com.example.LearningManagementSystem.Repository.CourseRepository;
+import com.example.LearningManagementSystem.Repository.CourseRepo;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,11 +14,11 @@ import java.util.List;
 @Service
 public class CourseService {
 
-    private final CourseRepository courseRepository;
+    private final CourseRepo courseRepository;
     private final InstructorService instructorService;
     private final CategoryService categoryService;
 
-    public CourseService(CourseRepository courseRepository,
+    public CourseService(CourseRepo courseRepository,
                          InstructorService instructorService,
                          CategoryService categoryService) {
         this.courseRepository = courseRepository;
