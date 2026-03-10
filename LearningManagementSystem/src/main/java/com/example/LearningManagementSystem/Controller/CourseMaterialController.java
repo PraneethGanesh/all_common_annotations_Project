@@ -41,4 +41,9 @@ public class CourseMaterialController {
                 .body("Course material :"+id+" successfully deleted");
     }
 
+    @GetMapping("/getCount")
+    public ResponseEntity<List<?>> getCourseMaterialCount(){
+       return courseMaterialService.getMaterialCount();
+    }
+
 }

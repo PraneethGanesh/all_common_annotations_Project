@@ -1,6 +1,8 @@
 package com.example.LearningManagementSystem.Controller;
 
 
+import com.example.LearningManagementSystem.DTO.StudentDTO;
+import com.example.LearningManagementSystem.DTO.StudentProfileDTO;
 import com.example.LearningManagementSystem.Entity.Student;
 import com.example.LearningManagementSystem.Service.StudentService;
 import org.springframework.http.HttpStatus;
@@ -18,12 +20,12 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getAllStudents(){
+    public List<StudentProfileDTO> getAllStudents(){
         return service.getAllStudents();
     }
 
     @PostMapping
-    public ResponseEntity<Student> addStudent(@RequestBody Student student){
+    public ResponseEntity<StudentProfileDTO> addStudent(@RequestBody Student student){
        return ResponseEntity.status(HttpStatus.OK)
                .body(service.addStudent(student));
     }
@@ -34,4 +36,6 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body("deleted student with id:"+id);
     }
+
+
 }

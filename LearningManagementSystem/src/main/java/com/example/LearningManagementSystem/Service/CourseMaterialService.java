@@ -5,6 +5,7 @@ import com.example.LearningManagementSystem.Entity.CourseMaterial;
 import com.example.LearningManagementSystem.Exception.CourseNotFoundException;
 import com.example.LearningManagementSystem.Repository.CourseMaterialRepo;
 import com.example.LearningManagementSystem.Repository.CourseRepo;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -44,4 +45,7 @@ public class CourseMaterialService {
         }
     }
 
+    public ResponseEntity<List<?>> getMaterialCount() {
+      return new ResponseEntity<>(repo.getMaterialCountPerCourse(), HttpStatus.OK);
+    }
 }
