@@ -2,6 +2,7 @@ package com.example.LearningManagementSystem.Service;
 
 import com.example.LearningManagementSystem.Entity.Student;
 import com.example.LearningManagementSystem.Entity.StudentProfile;
+import com.example.LearningManagementSystem.Exception.StudentNotFoundException;
 import com.example.LearningManagementSystem.Repository.StudentRepo;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +25,11 @@ public class StudentService {
             studentProfile.setStudent(student);
         }
         return studentRepo.save(student);
+    }
+
+    public void deleteStudent(long id) {
+        Student student=studentRepo.findById(id)
+                .orElseThrow(()->new StudentNotFoundException("Studnet with id:"+id+" not found"));
+        studentRepo.delete(student);
     }
 }
