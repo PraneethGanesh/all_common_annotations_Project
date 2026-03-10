@@ -1,7 +1,6 @@
 package com.example.LearningManagementSystem.Controller;
 
 
-import com.example.LearningManagementSystem.DTO.StudentDTO;
 import com.example.LearningManagementSystem.DTO.StudentProfileDTO;
 import com.example.LearningManagementSystem.Entity.Student;
 import com.example.LearningManagementSystem.Service.StudentService;
@@ -36,6 +35,10 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body("deleted student with id:"+id);
     }
-
-
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateStudent(@PathVariable long id,@RequestBody Student student){
+        service.updateStudent(id,student);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("updated student with id"+id);
+    }
 }
