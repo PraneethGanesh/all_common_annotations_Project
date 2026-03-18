@@ -95,7 +95,6 @@ public class StudentService {
     }
 
     @Transactional
-    @Cacheable(value = "Students",key = "#id")
     public StudentProfileDTO addStudent(Student student) {
         StudentProfile studentProfile = student.getProfile();
         if (studentProfile != null) {
