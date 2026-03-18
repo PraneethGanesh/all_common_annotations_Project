@@ -93,6 +93,7 @@ public class StudentService {
     }
 
     @Transactional
+    @Cacheable(value = "Students",key = "#id")
     public StudentProfileDTO addStudent(Student student) {
         StudentProfile studentProfile = student.getProfile();
         if (studentProfile != null) {
@@ -107,7 +108,6 @@ public class StudentService {
     @Transactional
     @CacheEvict(value = "Students",key = "#id")
     public void deleteStudent(long id) {
-        // BUG FIX: was "Studnet" (typo) — corrected to "Student"
         Student student = studentRepo.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with id:" + id + " not found"));
         studentRepo.delete(student);
