@@ -1,29 +1,40 @@
 package com.example.LearningManagementSystem.Service;
 
+
+
 import com.example.LearningManagementSystem.DTO.StudentProfileDTO;
 import com.example.LearningManagementSystem.Entity.Student;
 import com.example.LearningManagementSystem.Entity.StudentProfile;
+import com.example.LearningManagementSystem.Event.StudentCreatedEvent;
 import com.example.LearningManagementSystem.Exception.StudentNotFoundException;
 import com.example.LearningManagementSystem.Notification.NotificationService;
 import com.example.LearningManagementSystem.Repository.StudentRepo;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.Cache;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 public class StudentService {
 
     private final StudentRepo studentRepo;
-    private final NotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public StudentService(StudentRepo studentRepo,
-                          @Qualifier("emailNotificationService") NotificationService notificationService) {
+                          ApplicationEventPublisher eventPublisher) {
         this.studentRepo = studentRepo;
-        this.notificationService = notificationService;
+        this.eventPublisher = eventPublisher;
     }
 
     public List<StudentProfileDTO> getAllStudents() {
@@ -35,8 +46,16 @@ public class StudentService {
         return studentProfileDTOS;
     }
 
+    @Cacheable(value = "Students",key = "#id")
+    public StudentProfileDTO getStudentById(long id){
+        Student student=studentRepo.findById(id)
+                .orElseThrow(()->new StudentNotFoundException("Student with id:" + id + " not found"));
+        return convertToStudentDTO(student);
+    }
+
     @Transactional
-    public void updateStudent(long id, Student updateStudent) {
+    @CacheEvict(value = "Students",key = "#id")
+    public StudentProfileDTO updateStudent(long id, Student updateStudent) {
         var student = studentRepo.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with id:" + id + " not found"));
 
@@ -57,8 +76,8 @@ public class StudentService {
             if (incoming.getDateOfBirth() != null) existingProfile.setDateOfBirth(incoming.getDateOfBirth());
             if (incoming.getEducation() != null) existingProfile.setEducation(incoming.getEducation());
         }
-
-        studentRepo.save(student);
+        Student savedStudent=studentRepo.save(student);
+        return convertToStudentDTO(savedStudent);
     }
 
     private StudentProfileDTO convertToStudentDTO(Student student) {
@@ -76,22 +95,24 @@ public class StudentService {
     }
 
     @Transactional
+    @Cacheable(value = "Students",key = "#id")
     public StudentProfileDTO addStudent(Student student) {
         StudentProfile studentProfile = student.getProfile();
         if (studentProfile != null) {
-            notificationService.Notify("Profile successfully created for:" + student.getEmail());
             studentProfile.setStudent(student);
             student.setProfile(studentProfile);
         }
         Student savedStudent = studentRepo.save(student);
+        eventPublisher.publishEvent(new StudentCreatedEvent(savedStudent.getStudentId()));
         return convertToStudentDTO(savedStudent);
     }
 
     @Transactional
+    @CacheEvict(value = "Students",key = "#id")
     public void deleteStudent(long id) {
-        // BUG FIX: was "Studnet" (typo) — corrected to "Student"
         Student student = studentRepo.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with id:" + id + " not found"));
         studentRepo.delete(student);
     }
+
 }

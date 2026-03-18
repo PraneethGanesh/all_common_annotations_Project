@@ -1,6 +1,8 @@
 package com.example.LearningManagementSystem.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 public class Student {
@@ -11,10 +13,13 @@ public class Student {
     private String name;
 
     @Column(unique = true)
+    @Email(message = "Must be a valid email")
+    //@Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            //message = "Invalid email format")
     private String email;
 
     private String password;
-
+    @Pattern(regexp = "\\d{10}", message = "Phone number must be 10 digits")
     private String phoneNumber;
 
     @OneToOne(mappedBy = "student",cascade = CascadeType.ALL)

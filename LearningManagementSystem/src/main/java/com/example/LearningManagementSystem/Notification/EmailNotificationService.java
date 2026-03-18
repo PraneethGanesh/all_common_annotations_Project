@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 @Service
-@Primary  // Makes this the default NotificationService when multiple impls exist
+@Primary
 public class EmailNotificationService implements NotificationService {
 
     @Override
